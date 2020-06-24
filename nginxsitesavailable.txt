@@ -1,0 +1,52 @@
+server {
+        server_name whoismatthewsloan.com www.whoismatthewsloan.com;
+    listen [::]:443 ssl ipv6only=on;
+    listen 443 ssl;
+
+            location / {
+      proxy_set_header    Host $host;
+      proxy_set_header    X-Real-IP $remote_addr;
+      proxy_set_header    X-Forwarded-Proto $scheme;
+
+    proxy_pass http://localhost:3000/;
+
+    }
+
+    ssl_certificate /etc/letsencrypt/live/whoismatthewsloan.com/fullchain.pem;
+    ssl_certificate_key /etc/letsencrypt/live/whoismatthewsloan.com/privkey.pem;
+    include /etc/letsencrypt/options-ssl-nginx.conf;
+    ssl_dhparam /etc/letsencrypt/ssl-dhparams.pem;
+
+}
+
+
+
+server {
+
+        listen 80 ;
+        listen [::]:80 ;
+
+
+        server_name whoismatthewsloan.com www.whoismatthewsloan.com;
+    if ($host = www.whoismatthewsloan.com) {
+        return 301 https://$host$request_uri;
+    }
+
+
+    if ($host = whoismatthewsloan.com) {
+        return 301 https://$host$request_uri;
+    }
+
+    return 404;
+}
+
+
+
+
+
+
+
+
+
+
+
